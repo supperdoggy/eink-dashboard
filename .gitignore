@@ -1,0 +1,9 @@
+node_modules/
+data/*
+!data/.gitkeep
+previews/*.png
+images/*
+__pycache__/
+.DS_Store
+.hallmark/
+/public/I demonstrate a mature level of leadersh.txt

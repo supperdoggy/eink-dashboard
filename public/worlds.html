@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Five fictional worlds for a black-and-white Holešovice weather and tram dashboard.">
+  <title>Somewhere in Holešovice</title>
+  <link rel="icon" href="/assets/moon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="worlds/worlds.css">
+  <script type="module" src="/worlds/worlds.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#worlds">Skip to the worlds</a>
+  <header class="studio-shell studio-header">
+    <a class="studio-wordmark" href="/" aria-label="Back to the Holešovice dashboard">Hello, Holešovice.</a>
+    <a href="/display.html">Choose display</a>
+  </header>
+  <main>
+    <div class="studio-shell studio-intro">
+      <h1>Somewhere in Holešovice.</h1>
+      <p>Five little worlds borrowing the weather outside your door.</p>
+      <nav class="world-nav" aria-label="Choose a dashboard world">
+        <a href="?view=all" data-view="all">All five</a>
+        <a href="?view=transmission" data-view="transmission">Transmission</a>
+        <a href="?view=courtyard" data-view="courtyard">The courtyard</a>
+        <a href="?view=petrol" data-view="petrol">Last stop</a>
+        <a href="?view=comic" data-view="comic">Small weather</a>
+        <a href="?view=mountain" data-view="mountain">Daylight mountain</a>
+      </nav>
+      <div class="study-controls">
+        <label for="study">See the world in</label>
+        <select id="study" name="study">
+          <option value="live">Actual weather</option>
+          <option value="clear">A clear afternoon</option>
+          <option value="rain">Rain, then puddles</option>
+          <option value="snow">A snowy winter day</option>
+          <option value="wind">A change in the wind</option>
+          <option value="night">The middle of the night</option>
+          <option value="rain-night">A rainy night</option>
+          <option value="snow-night">A snowy night</option>
+          <option value="wind-night">A windy night</option>
+        </select>
+        <button id="refresh-worlds" type="button">Refresh data</button>
+        <span id="study-status" role="status">Receiving weather and tram departures…</span>
+      </div>
+    </div>
+    <div class="studio-shell" id="worlds">
+      <section class="world-proposal" data-world="transmission" aria-labelledby="name-transmission">
+        <div class="world-description"><h2 id="name-transmission">A transmission from your apartment.</h2><p>An intercepted bulletin. A strange signal. One more piece of the story each day.</p><a href="?view=transmission&display=1" target="_blank" rel="noopener">Open display view</a><button type="button" data-export="transmission">Download live PNG</button></div>
+        <div class="world-wrap"><article id="world-transmission" class="world-canvas world-transmission" aria-label="Station Holešovice transmission"><p class="loading-world">Receiving station weather…</p></article></div>
+      </section>
+      <section class="world-proposal" data-world="courtyard" aria-labelledby="name-courtyard">
+        <div class="world-description"><h2 id="name-courtyard">A place that remembers.</h2><p>Rain leaves puddles. A leaf waits for the wind. Miso keeps returning to the windowsill.</p><a href="?view=courtyard&display=1" target="_blank" rel="noopener">Open display view</a><button type="button" data-export="courtyard">Download live PNG</button></div>
+        <div class="world-wrap"><article id="world-courtyard" class="world-canvas world-courtyard" aria-label="The persistent courtyard"><p class="loading-world">Looking through the courtyard window…</p></article></div>
+      </section>
+      <section class="world-proposal" data-world="petrol" aria-labelledby="name-petrol">
+        <div class="world-description"><h2 id="name-petrol">The last stop before nowhere.</h2><p>A weather board at the edge of a very long road. Sometimes, someone stops by.</p><a href="?view=petrol&display=1" target="_blank" rel="noopener">Open display view</a><button type="button" data-export="petrol">Download live PNG</button></div>
+        <div class="world-wrap"><article id="world-petrol" class="world-canvas world-petrol" aria-label="The last petrol station"><p class="loading-world">Checking the sign by the road…</p></article></div>
+      </section>
+      <section class="world-proposal" data-world="comic" aria-labelledby="name-comic">
+        <div class="world-description"><h2 id="name-comic">Small weather. Big feelings.</h2><p>Four panels, one tiny character, and a complicated relationship with going outside.</p><a href="?view=comic&display=1" target="_blank" rel="noopener">Open display view</a><button type="button" data-export="comic">Download live PNG</button></div>
+        <div class="world-wrap"><article id="world-comic" class="world-canvas world-comic" aria-label="Four-panel weather comic"><p class="loading-world">Finding out how outside feels…</p></article></div>
+      </section>
+      <section class="world-proposal" data-world="mountain" aria-labelledby="name-mountain">
+        <div class="world-description"><h2 id="name-mountain">A mountain that measures the day.</h2><p>Sunrise starts the climb. Sunset makes camp. A shorter winter day means a shorter trail.</p><a href="?view=mountain&display=1" target="_blank" rel="noopener">Open display view</a><button type="button" data-export="mountain">Download live PNG</button></div>
+        <div class="world-wrap"><article id="world-mountain" class="world-canvas world-mountain" aria-label="The daylight mountain"><p class="loading-world">Checking how much daylight is left…</p></article></div>
+      </section>
+    </div>
+    <section class="studio-shell memory-notes" aria-labelledby="memory-heading">
+      <div><h2 id="memory-heading">The same place tomorrow.</h2><p>These are fictional scenes driven by real weather. Their memory is saved on the Pi. Weather studies only change this preview.</p><p>NAS and indoor sensors are not connected yet.</p></div>
+      <div><h3>From the station log</h3><ol id="station-log"><li>The first transmission is still arriving.</li></ol></div>
+    </section>
+    <noscript><p class="studio-shell">The five concepts are described above. Enable JavaScript to draw the scenes and load real weather and departures.</p></noscript>
+  </main>
+  <footer class="studio-shell studio-footer"><p>Fictional worlds. Real Holešovice weather.</p><p><a href="https://open-meteo.com/">Open-Meteo</a> / <a href="https://pid.cz/o-systemu/opendata/">Prague transport</a>. Trams use the published timetable, without live delays.</p></footer>
+</body>
+</html>

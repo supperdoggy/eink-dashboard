@@ -1,0 +1,22 @@
+{
+  "name": "eink-dashboard",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "python3 server.py",
+    "sync": "python3 scripts/sync_transit.py",
+    "render": "node scripts/render.mjs",
+    "test": "python3 -m unittest discover -s tests -v",
+    "check:browser": "node scripts/check-browser.mjs",
+    "check:worlds": "node scripts/check-worlds.mjs"
+  },
+  "devDependencies": {
+    "@fontsource-variable/chivo-mono": "^5.2.0",
+    "@fontsource-variable/dm-sans": "^5.2.0",
+    "@fontsource-variable/fredoka": "^5.3.0",
+    "@fontsource/zilla-slab": "^5.2.0",
+    "lucide-static": "^0.577.0",
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^24.0.0"
+  }
+}

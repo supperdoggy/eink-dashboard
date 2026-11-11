@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Three black-and-white dashboard designs for weather and tram departures at Ortenovo náměstí in Prague.">
+  <title>Holešovice, at a glance</title>
+  <link rel="icon" href="/assets/sun.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/tokens.css">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/playful.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to dashboards</a>
+  <header class="site-header shell">
+    <a class="wordmark" href="/" aria-label="Holešovice dashboard home">Holešovice<span>at a glance</span></a>
+    <span class="device-note">7.5″ e-paper / black & white</span>
+    <button class="refresh" type="button" id="refresh">Refresh data</button>
+  </header>
+  <main id="main">
+    <section class="intro shell" aria-labelledby="page-title">
+      <h1 id="page-title">A little hello before you go.</h1>
+      <p>Your weather. Your trams. A little personality.<br>Three playful takes on your everyday dashboard.</p>
+      <nav aria-label="Choose a design" class="design-nav">
+        <a href="/?design=all" data-design="all">All three</a>
+        <a href="/?design=daily" data-design="daily">01 / Hello, Holešovice</a>
+        <a href="/?design=weather" data-design="weather">02 / Weather buddy</a>
+        <a href="/?design=station" data-design="station">03 / A little adventure</a>
+      </nav>
+      <p class="data-status" id="data-status" role="status">Connecting to weather and the official PID timetable…</p>
+      <p><a href="/worlds.html">Explore five illustrated dashboard worlds</a></p>
+      <p><a href="/display.html">Choose the dashboard on your e-ink screen</a></p>
+    </section>
+    <div id="designs" class="shell">
+      <section class="proposal" data-proposal="daily" aria-labelledby="daily-name">
+        <div class="proposal-copy">
+          <span class="design-number">01</span>
+          <h2 id="daily-name">Hello, Holešovice</h2>
+          <p>A little weather poster. A temperature sticker, a friendly forecast, and your way into the day.</p>
+          <a href="/?design=daily&display=1" target="_blank" rel="noopener">Open display view</a>
+          <button type="button" class="export" data-export="daily">Download PNG</button>
+          <span class="dimensions">800 × 480 pixels</span>
+        </div>
+        <div class="canvas-wrap"><article class="screen daily" id="screen-daily" aria-label="Hello, Holešovice dashboard"><p class="initial-state">Loading current weather and scheduled departures…</p></article></div>
+      </section>
+      <section class="proposal" data-proposal="weather" aria-labelledby="weather-name">
+        <div class="proposal-copy">
+          <span class="design-number">02</span>
+          <h2 id="weather-name">Weather buddy</h2>
+          <p>A cheerful little cloud with an opinion about your outfit. Practical advice, friendly delivery.</p>
+          <a href="/?design=weather&display=1" target="_blank" rel="noopener">Open display view</a>
+          <button type="button" class="export" data-export="weather">Download PNG</button>
+          <span class="dimensions">800 × 480 pixels</span>
+        </div>
+        <div class="canvas-wrap"><article class="screen weather" id="screen-weather" aria-label="Weather buddy dashboard"><p class="initial-state">Loading current weather and scheduled departures…</p></article></div>
+      </section>
+      <section class="proposal" data-proposal="station" aria-labelledby="station-name">
+        <div class="proposal-copy">
+          <span class="design-number">03</span>
+          <h2 id="station-name">A little adventure</h2>
+          <p>A tram ticket to wherever today takes you. Two directions, a weather stub, and a friendly send-off.</p>
+          <a href="/?design=station&display=1" target="_blank" rel="noopener">Open display view</a>
+          <button type="button" class="export" data-export="station">Download PNG</button>
+          <span class="dimensions">800 × 480 pixels</span>
+        </div>
+        <div class="canvas-wrap"><article class="screen station" id="screen-station" aria-label="A little adventure dashboard"><p class="initial-state">Loading current weather and scheduled departures…</p></article></div>
+      </section>
+    </div>
+    <noscript><p class="shell">JavaScript is needed to load the weather and timetable. Enable it, then reload this page.</p></noscript>
+  </main>
+  <footer class="site-footer shell">
+    <p>Weather: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> (model estimates). Trams: <a href="https://pid.cz/o-systemu/opendata/" target="_blank" rel="noopener">Prague integrated transport</a> (CC BY).</p>
+    <p>Departure times are scheduled. Live delays are not connected.</p>
+  </footer>
+</body>
+</html>

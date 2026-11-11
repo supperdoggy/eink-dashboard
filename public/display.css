@@ -1,0 +1,41 @@
+/* Hallmark · shape: app screen · theme: existing Holešovice system · signature: one saved choice for the physical e-ink screen · surface: absolute · v2.0.0 */
+/* Critique · two named options and an honest distinction between the saved choice and the screen's last completed refresh. */
+/* Hallmark · dismissed 25 · the shared gallery caption selector .proposal-copy p is not present in this chooser; its existing measure does not apply here. */
+.device-settings { width: min(720px, calc(100% - 48px)); margin-inline: auto; padding-bottom: var(--space-48); }
+.settings-nav { display: flex; justify-content: space-between; align-items: center; gap: var(--space-md); min-height: 88px; border-bottom: 2px solid var(--color-ink); }
+.settings-nav a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; white-space: nowrap; }
+.settings-nav a:first-child { font-weight: 700; text-decoration: none; }
+.device-settings h1 { margin-top: var(--space-48); font: 600 38px/1.1 var(--font-display); }
+.settings-intro { margin-top: var(--space-md); font-size: 17px; }
+#display-form { margin-top: var(--space-32); }
+#dashboard-choices { padding: 0; margin: 0; border: 0; min-width: 0; }
+#dashboard-choices legend { padding: 0 0 var(--space-md); font-size: 15px; font-weight: 600; }
+.dashboard-option { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); padding-block: var(--space-20); border-top: 1px solid var(--color-rule); }
+.dashboard-option:last-child { border-bottom: 1px solid var(--color-rule); }
+.dashboard-option label { display: flex; align-items: center; gap: var(--space-md); flex: 1; min-width: 0; cursor: pointer; min-height: 64px; }
+.dashboard-option input { width: 20px; height: 20px; margin: 0; flex-shrink: 0; accent-color: var(--color-ink); }
+.dashboard-option strong { display: block; font-size: 21px; font-weight: 600; }
+.dashboard-option small { display: block; margin-top: var(--space-xs); font-size: 15px; line-height: 1.5; max-width: 44ch; }
+.dashboard-option a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; white-space: nowrap; }
+.settings-actions { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-lg); }
+.settings-actions button { min-height: 44px; padding: var(--space-sm) var(--space-md); white-space: nowrap; }
+#apply-dashboard { background: var(--color-ink); color: var(--color-paper); }
+#apply-dashboard:hover { background: var(--color-paper); color: var(--color-ink); }
+.settings-actions button:active { transform: translateY(1px); }
+.settings-actions button:disabled, #dashboard-choices:disabled { opacity: .55; cursor: not-allowed; }
+.settings-actions button[aria-busy='true'] { cursor: progress; }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+#selection-status { margin-top: var(--space-md); min-height: 3em; font-size: 15px; line-height: 1.5; }
+.physical-state { margin-top: var(--space-32); padding-top: var(--space-lg); border-top: 2px solid var(--color-rule); }
+.physical-state h2 { font-size: 22px; }
+.physical-state p { margin-top: var(--space-md); font-size: 15px; line-height: 1.6; }
+@media (max-width: 500px) {
+  .device-settings { width: calc(100% - 32px); }
+  .device-settings h1 { font-size: 30px; margin-top: var(--space-32); }
+  .settings-nav { gap: var(--space-sm); }
+  .settings-nav a { font-size: 13px; }
+  .dashboard-option { gap: var(--space-sm); }
+  .dashboard-option label { gap: var(--space-sm); }
+  .dashboard-option strong { font-size: 19px; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }

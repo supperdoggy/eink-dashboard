@@ -1,0 +1,28 @@
+/* Hallmark · shape: app screen · theme: Newsprint, Wayfind and Carnival (dealt, monochrome by request) · genre: editorial · signature: the weather and both platforms at Ortenovo náměstí · v2.0.0 */
+/* Critique · three fixed-size physical display layouts; browser chrome stays outside the exported image. */
+:root {
+  --color-paper: #fff;
+  --color-ink: #000;
+  --color-rule: var(--color-ink);
+  --color-muted: var(--color-ink);
+  --color-focus: var(--color-ink);
+  --font-body: "DM Sans", Arial, sans-serif;
+  --font-display: var(--font-playful, var(--font-body));
+  --font-board: var(--font-body);
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-12: 12px;
+  --space-md: 16px;
+  --space-20: 20px;
+  --space-lg: 24px;
+  --space-28: 28px;
+  --space-32: 32px;
+  --space-36: 36px;
+  --space-xl: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --radius: 0;
+  --container: 1120px;
+  --screen-width: 800px;
+  --screen-height: 480px;
+}

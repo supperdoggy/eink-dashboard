@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Choose Little Adventure or Daylight Mountain for your Holešovice e-ink display.">
+  <title>Choose your e-ink dashboard</title>
+  <link rel="icon" href="/assets/sun.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="playful.css">
+  <link rel="stylesheet" href="display.css">
+  <script type="module" src="/display.mjs"></script>
+</head>
+<body>
+  <main class="device-settings">
+    <nav class="settings-nav" aria-label="Dashboard navigation"><a href="/">Hello, Holešovice.</a><a href="/worlds.html?view=mountain">Explore the worlds</a></nav>
+    <h1>On your e-ink screen.</h1>
+    <p class="settings-intro">Two dashboards, one little window into your day.</p>
+    <form id="display-form">
+      <fieldset id="dashboard-choices" disabled>
+        <legend>Choose a dashboard</legend>
+        <div class="dashboard-option">
+          <label for="choose-station"><input type="radio" name="design" id="choose-station" value="station"><span><strong>Little Adventure</strong><small>Your original tram ticket, weather buddy and daily greeting.</small></span></label>
+          <a href="/?design=station" target="_blank" rel="noopener">Preview</a>
+        </div>
+        <div class="dashboard-option">
+          <label for="choose-mountain"><input type="radio" name="design" id="choose-mountain" value="mountain"><span><strong>Daylight Mountain</strong><small>Engraved landscapes, changing weather and a climber following daylight.</small></span></label>
+          <a href="/worlds.html?view=mountain" target="_blank" rel="noopener">Preview</a>
+        </div>
+      </fieldset>
+      <div class="settings-actions"><button id="apply-dashboard" type="submit" disabled>Use this dashboard</button><button id="check-display" type="button">Check status</button></div>
+      <p id="selection-status" role="status" aria-live="polite">Reading the Pi’s dashboard choice…</p>
+    </form>
+    <section class="physical-state" aria-labelledby="physical-heading"><h2 id="physical-heading">On the screen now</h2><p id="physical-status">Checking the last successful refresh…</p><p>Both dashboards use real weather and scheduled trams in both directions. Updates run every minute. Your choice is saved through restarts.</p></section>
+    <noscript><p>Enable JavaScript to save a dashboard choice. You can still open either preview above.</p></noscript>
+  </main>
+</body>
+</html>

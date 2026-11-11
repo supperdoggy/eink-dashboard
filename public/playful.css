@@ -1,0 +1,122 @@
+/* Hallmark · shape: app screen · theme: existing system, playful revision by request · surface: absolute · genre: playful · signature: a weather buddy and a ticket out into Holešovice · v2.0.0 */
+/* Critique · round type and a weather character make the useful information feel welcoming; the ticket changes the composition rather than adding decoration. */
+@font-face { font-family: "Fredoka"; src: url('/assets/fredoka.woff2') format('woff2'); font-style: normal; font-weight: 300 700; font-display: swap; }
+@font-face { font-family: "Fredoka"; src: url('/assets/fredoka-ext.woff2') format('woff2'); font-style: normal; font-weight: 300 700; font-display: swap; unicode-range: U+0100-02FF,U+0300-036F,U+1E00-1EFF; }
+:root { --font-playful: "Fredoka", "DM Sans", sans-serif; --radius-playful: 18px; }
+.wordmark, .intro h1, .proposal-copy h2, .design-number { font-family: var(--font-playful); font-weight: 550; }
+.wordmark { font-size: 31px; }
+.intro h1 { font-size: 52px; letter-spacing: -.03em; }
+.refresh, .export { border: 2px solid var(--color-ink); border-radius: 12px; box-shadow: 3px 3px var(--color-ink); }
+.refresh:active, .export:active { transform: translate(2px, 2px); box-shadow: 1px 1px var(--color-ink); }
+.design-number { display: inline-flex; width: 54px; height: 54px; justify-content: center; align-items: center; border: 2px solid var(--color-ink); border-radius: 50%; transform: rotate(-8deg); font-size: 28px; font-variant-numeric: tabular-nums; }
+.proposal-copy h2 { font-size: 31px; }
+.screen { padding: var(--space-md) var(--space-lg); }
+.screen h2, .screen h3 { font-family: var(--font-playful); font-weight: 550; }
+.screen .temp { font-family: var(--font-playful); font-weight: 550; letter-spacing: -.04em; }
+.screen .weather-buddy { display: block; width: 96px; height: 78px; flex-shrink: 0; overflow: visible; }
+.screen .clothing h3 { font-family: var(--font-playful); font-weight: 550; letter-spacing: -.02em; }
+.screen .forecast { border-block: 2px solid var(--color-ink); }
+.screen .hour { border-left: 0; padding-inline: var(--space-12); }
+.screen .hour:first-child { padding-left: 0; }
+.screen .hour:last-child { padding-right: 0; }
+.screen .hour strong { font-family: var(--font-playful); font-size: 25px; font-weight: 550; }
+.screen .platform-code { border-radius: 50%; min-width: 22px; line-height: 22px; font-weight: 700; }
+.screen .platform-head h3 { font-family: var(--font-body); font-weight: 650; }
+.screen .departure .line { width: 26px; line-height: 24px; text-align: center; background: var(--color-ink); color: var(--color-paper); border-radius: 7px; font-size: 16px; }
+.screen .minutes { font-family: var(--font-playful); font-weight: 550; font-size: 20px; }
+.screen .minutes small { font-family: var(--font-body); }
+.screen .screen-footer { font-size: 11px; padding-top: var(--space-sm); }
+.daily-mast { border-bottom: 0; padding-bottom: 0; }
+.daily-mast h2 { font-family: var(--font-playful); font-size: 39px; font-weight: 550; }
+.daily-mast span { border: 1px solid var(--color-ink); padding: var(--space-xs) var(--space-12); border-radius: 40px; transform: rotate(3deg); font-size: 13px; }
+.daily-now { height: 152px; grid-template-columns: 312px minmax(0, 1fr); gap: var(--space-20); padding-top: var(--space-sm); }
+.daily-reading { gap: var(--space-md); }
+.temperature-sticker { display: flex; width: 142px; height: 136px; flex-shrink: 0; align-items: center; justify-content: center; background: var(--color-ink); color: var(--color-paper); clip-path: polygon(50% 0,60% 7%,73% 3%,79% 16%,93% 18%,93% 33%,100% 43%,94% 54%,98% 68%,85% 75%,81% 90%,65% 90%,54% 100%,42% 93%,27% 98%,21% 84%,7% 80%,8% 65%,0 54%,7% 41%,3% 27%,18% 21%,24% 8%,39% 9%); transform: rotate(-5deg); }
+.daily-reading .temp { font-family: var(--font-playful); font-size: 74px; font-weight: 550; letter-spacing: -.07em; }
+.daily-reading .temp .degree { font-size: .44em; margin-top: .2em; }
+.daily-reading .compact-reading .temp { font-size: 56px; }
+.daily-reading .condition { max-width: 150px; text-align: center; }
+.daily-reading .weather-buddy { width: 112px; height: 82px; margin-inline: auto; }
+.daily-reading .condition p { margin-top: 0; font-size: 15px; }
+.daily-reading .condition .feels { margin-top: var(--space-xs); font-size: 14px; }
+.daily-advice { border-left: 0; padding: var(--space-md) 0 0; margin-bottom: 0; }
+.daily-advice .clothing h3 { font-family: var(--font-playful); font-size: 36px; font-weight: 550; }
+.daily .stats { gap: var(--space-md); font-size: 14px; margin-top: var(--space-sm); flex-wrap: wrap; row-gap: var(--space-xs); }
+.daily .forecast { min-height: 70px; }
+.daily .transit-title h2 { font-family: var(--font-playful); font-size: 23px; font-weight: 550; }
+.daily .transit-title { padding-top: var(--space-sm); }
+.daily .platform-head { min-height: 27px; }
+.daily .departure { min-height: 27px; }
+.daily .platforms { padding-top: 0; }
+.weather-topline { padding-bottom: var(--space-sm); border-bottom: 0; align-items: center; }
+.weather-topline h2 { font-size: 29px; font-weight: 550; }
+.weather-topline span { font-size: 13px; }
+.weather-now { grid-template-columns: 145px 164px minmax(0, 1fr); gap: var(--space-20); height: 144px; padding-top: 0; align-items: center; }
+.buddy-character { text-align: center; }
+.screen .buddy-character .weather-buddy { width: 145px; height: 113px; }
+.buddy-character p { font-size: 14px; margin-top: var(--space-xs); }
+.weather-reading { display: block; text-align: center; }
+.weather-reading .temp { font-size: 101px; font-weight: 550; line-height: 1; }
+.weather-reading .temp .degree { font-size: .42em; margin-top: .17em; }
+.weather-reading.compact-reading .temp { font-size: 78px; }
+.weather-reading .feels { margin-top: var(--space-xs); font-size: 15px; }
+.weather-advice { background: var(--color-ink); color: var(--color-paper); border-radius: 22px; padding: var(--space-md) var(--space-20); position: relative; }
+.weather-advice::before { content: ""; position: absolute; left: -10px; top: 30px; width: 20px; height: 20px; background: var(--color-ink); transform: rotate(45deg); }
+.weather-advice .clothing h3 { font-size: 33px; font-weight: 550; }
+.weather-advice .summary { font-size: 14px; line-height: 1.4; }
+.buddy-metrics { display: flex; justify-content: space-between; gap: var(--space-md); align-items: center; min-height: 32px; padding-bottom: var(--space-xs); }
+.buddy-metrics .stats { margin: 0; font-size: 13px; gap: var(--space-12); }
+.buddy-metrics .stats span { gap: var(--space-xs); }
+.buddy-metrics .stats .icon { width: 17px; height: 17px; }
+.buddy-metrics > p { font-size: 13px; }
+.weather .forecast { min-height: 71px; }
+.weather .transit-title h2 { font-size: 22px; }
+.weather .platform-head { min-height: 26px; }
+.weather .departure { min-height: 27px; }
+.station { padding: var(--space-md) var(--space-lg); font-family: var(--font-body); }
+.station-mast { margin: 0; padding: 0 0 var(--space-12); background: var(--color-paper); color: var(--color-ink); }
+.station-mast h2 { font-size: 32px; letter-spacing: -.02em; font-weight: 550; }
+.station-mast .clock { font-family: var(--font-playful); font-size: 30px; font-weight: 550; }
+.station-mast { gap: var(--space-md); }
+.station-mast .rotating-greeting { flex: 1; min-width: 0; white-space: nowrap; font-size: 30px; line-height: 1.2; font-variant-numeric: tabular-nums; }
+.station-mast .clock { flex-shrink: 0; }
+.ticket-core { display: grid; grid-template-columns: minmax(0, 1fr) 218px; height: 310px; flex-shrink: 0; border: 2px solid var(--color-ink); border-radius: 20px; }
+.ticket-journey { padding: var(--space-12) var(--space-md); min-width: 0; }
+.ticket-journey .transit-title { padding-top: 0; align-items: center; }
+.ticket-journey .transit-title h2 { font-size: 24px; }
+.ticket-journey .transit-title > span { font-size: 11px; white-space: nowrap; }
+.station .platforms { grid-template-columns: minmax(0, 1fr); padding-block: var(--space-xs) 0; gap: var(--space-sm); }
+.station .platform + .platform { border-left: 0; border-top: 1px dashed var(--color-ink); padding-left: 0; padding-top: var(--space-sm); }
+.station .platform-head { min-height: 24px; margin-bottom: var(--space-xs); gap: var(--space-sm); }
+.station .platform-head h3 { font-size: 15px; letter-spacing: 0; }
+.station .platform-code { min-width: 22px; line-height: 22px; font-size: 12px; }
+.station .departure { min-height: 29px; grid-template-columns: 30px minmax(0, 1fr) 50px 63px; gap: var(--space-sm); border-bottom: 0; }
+.station .destination { font-size: 15px; line-height: 1.25; letter-spacing: 0; }
+.station .departure time { font-size: 14px; }
+.station .minutes { font-size: 22px; letter-spacing: 0; }
+.station-weather { display: flex; flex-direction: column; justify-content: center; gap: 0; min-height: 0; border: 0; border-left: 2px dashed var(--color-ink); padding: var(--space-12); text-align: center; position: relative; }
+.station-weather::before, .station-weather::after { content: ""; width: 16px; height: 16px; border: 2px solid var(--color-ink); border-radius: 50%; position: absolute; left: -9px; background: var(--color-paper); }
+.station-weather::before { top: -10px; }
+.station-weather::after { bottom: -10px; }
+.station .ticket-buddy .weather-buddy { width: 102px; height: 80px; }
+.station-weather .temp { font-size: 68px; line-height: .95; font-variant-numeric: tabular-nums; }
+.station-weather .temp .degree { font-size: .45em; margin-top: .16em; font-variant-numeric: tabular-nums; }
+.station-weather .feels { margin-top: var(--space-xs); font-size: 14px; }
+.station-weather .clothing { margin-top: var(--space-12); }
+.station-weather .clothing h3 { font-size: 23px; font-weight: 550; letter-spacing: -.02em; margin-bottom: 0; }
+.station-weather .clothing .summary { display: none; }
+.ticket-precip { margin-top: var(--space-sm); font-size: 12px; }
+.station .forecast { margin-top: var(--space-12); min-height: 60px; }
+.station .hour strong { font-size: 23px; }
+.station .hour time, .station .hour .precip { font-size: 12px; }
+.station .hour > .icon { width: 20px; height: 20px; }
+.screen .forecast > .empty { grid-column: 1 / -1; align-self: center; }
+@media (max-width: 1000px) {
+  .proposal-copy { grid-template-columns: 54px minmax(0, 1fr) auto; }
+}
+@media (max-width: 600px) {
+  .intro h1 { font-size: 43px; }
+  .proposal-copy { grid-template-columns: 44px minmax(0, 1fr); }
+  .design-number { width: 36px; height: 36px; font-size: 22px; }
+  .proposal-copy h2 { font-size: 28px; }
+}

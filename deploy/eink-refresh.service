@@ -1,0 +1,15 @@
+[Unit]
+Description=Render HTML and refresh the Waveshare e-paper dashboard
+Wants=eink-dashboard.service
+After=eink-dashboard.service
+
+[Service]
+Type=oneshot
+User=maks
+WorkingDirectory=/home/maks/eink-dashboard
+Environment=PYTHONUNBUFFERED=1
+Environment=GPIOZERO_PIN_FACTORY=lgpio
+Environment=CHROME_PATH=/usr/bin/chromium-headless-shell
+ExecStart=/usr/bin/python3 hardware/refresh.py
+TimeoutStartSec=250
+KillMode=control-group

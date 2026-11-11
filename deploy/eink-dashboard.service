@@ -1,0 +1,18 @@
+[Unit]
+Description=Holešovice dashboard weather and timetable server
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=maks
+WorkingDirectory=/home/maks/eink-dashboard
+Environment=PYTHONUNBUFFERED=1
+Environment=CHROME_PATH=/usr/bin/chromium-headless-shell
+Environment=EINK_HARDWARE=1
+ExecStart=/usr/bin/python3 server.py --host 0.0.0.0
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
