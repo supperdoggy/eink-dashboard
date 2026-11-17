@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export LC_ALL=C
+
+state_file="${RUNTIME_DIRECTORY:?}/misses"
+radio=$(nmcli --wait 5 radio wifi)
+state=$(nmcli --wait 5 -g GENERAL.STATE device show wlan0)
+
+# Leave a healthy link or a deliberately disabled radio alone.
+if [[ "$radio" != enabled || "${state%% *}" == 100 || "${state%% *}" == 10 ]]; then
+  rm -f "$state_file"
+  exit 0
+fi
+
+misses=0
+if [[ -r "$state_file" ]]; then
+  read -r misses < "$state_file" || misses=0
+fi
+if [[ ! "$misses" =~ ^[0-2]$ ]]; then
+  misses=0
+fi
+misses=$((misses + 1))
+if (( misses < 3 )); then
+  printf '%s\n' "$misses" > "$state_file"
+  exit 0
+fi
+
+rm -f "$state_file"
+# NetworkManager may have reconnected since the first status check.
+state=$(nmcli --wait 5 -g GENERAL.STATE device show wlan0)
+if [[ "${state%% *}" == 100 || "${state%% *}" == 10 || "$(nmcli --wait 5 radio wifi)" != enabled ]]; then
+  exit 0
+fi
+printf 'wlan0 still down after three checks (%s). Reactivating the saved profile.\n' "$state"
+if nmcli --wait 30 connection up uuid "${WIFI_PROFILE_UUID:?}" ifname wlan0; then
+  printf 'Wi-Fi profile reactivated.\n'
+else
+  printf 'Wi-Fi reactivation failed. NetworkManager and the timer will keep retrying.\n' >&2
+  exit 1
+fi

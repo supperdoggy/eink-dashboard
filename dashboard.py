@@ -1,12 +1,12 @@
 """Weather and timetable data; runtime requires only Python 3.9+."""
-from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from datetime import datetime, timedelta, timezone
 import json
+import logging
 from pathlib import Path
 import sqlite3
-import threading
 import time
+from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 from zoneinfo import ZoneInfo
@@ -16,8 +16,10 @@ from world import world_snapshot
 ROOT = Path(__file__).resolve().parent
 PRAGUE = ZoneInfo("Europe/Prague")
 WEATHER_URL = "https://api.open-meteo.com/v1/forecast"
-_weather_cache = {"value": None, "at": 0}
-_weather_lock = threading.Lock()
+logger = logging.getLogger(__name__)
+WEATHER_REFRESH_SECONDS = 600
+WEATHER_RETRY_SECONDS = 60
+_weather_cache = None
 
 
 def format_weather(saved, now=None, stale=False):
@@ -105,60 +107,89 @@ def transit(now=None, database=None):
                 "fetchedAt": now.isoformat(), "source": "PID / ROPID"}
 
 
-def weather():
-    with _weather_lock:
-        if (_weather_cache["value"] and time.monotonic() - _weather_cache["at"] < 600
-                and datetime.fromisoformat(_weather_cache["value"]["fetchedAt"]).astimezone(PRAGUE).date() == datetime.now(PRAGUE).date()):
-            return format_weather(_weather_cache["value"])
-        params = {
-            "latitude": 50.107826, "longitude": 14.447080,
-            "current": "temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m,precipitation,is_day",
-            "hourly": "temperature_2m,apparent_temperature,precipitation_probability,rain,snowfall,weather_code,is_day",
-            "daily": "temperature_2m_max,temperature_2m_min,sunrise,sunset",
-            "timezone": "Europe/Prague", "forecast_days": 2, "timeformat": "unixtime",
-        }
+def weather(now=None):
+    """Read the last complete forecast without waiting on the weather provider."""
+    now = (now or datetime.now(PRAGUE)).astimezone(PRAGUE)
+    cached = _weather_cache
+    if cached:
+        saved, fetched_at, refresh_failed = cached
+        if fetched_at.date() == now.date():
+            age = now.timestamp() - fetched_at.timestamp()
+            return format_weather(saved, now, stale=refresh_failed or age >= WEATHER_REFRESH_SECONDS)
+    return {"status": "unavailable", "error": "Weather unavailable. Check the internet connection."}
+
+
+def maintain_weather():
+    """The server's single weather worker publishes completed forecasts for its readers."""
+    global _weather_cache
+    path = ROOT / "data/weather.json"
+    try:
+        saved = json.loads(path.read_text())
+        fetched_at = datetime.fromisoformat(saved["fetchedAt"]).astimezone(PRAGUE)
+        format_weather(saved)
+        _weather_cache = (saved, fetched_at, False)
+    except FileNotFoundError:
+        pass
+    except (OSError, ValueError, KeyError, TypeError, IndexError):
+        logger.exception("Could not load the saved forecast")
+
+    params = {
+        "latitude": 50.107826, "longitude": 14.447080,
+        "current": "temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_direction_10m,precipitation,is_day",
+        "hourly": "temperature_2m,apparent_temperature,precipitation_probability,rain,snowfall,weather_code,is_day",
+        "daily": "temperature_2m_max,temperature_2m_min,sunrise,sunset",
+        "timezone": "Europe/Prague", "forecast_days": 2, "timeformat": "unixtime",
+    }
+    request = Request(WEATHER_URL + "?" + urlencode(params), headers={"User-Agent": "eink-dashboard/1.0"})
+    while True:
+        started = time.monotonic()
         try:
-            request = Request(WEATHER_URL + "?" + urlencode(params), headers={"User-Agent": "eink-dashboard/1.0"})
             with urlopen(request, timeout=12) as response:
                 raw = json.load(response)
-            now = datetime.now(PRAGUE)
-            saved = {"raw": raw, "fetchedAt": now.isoformat()}
-            result = format_weather(saved, now)
-            _weather_cache.update(value=saved, at=time.monotonic())
-            cache = ROOT / "data/weather.json"
-            cache.parent.mkdir(exist_ok=True)
-            cache.write_text(json.dumps(saved))
-            return result
-        except Exception:
-            previous = _weather_cache["value"]
-            cache = ROOT / "data/weather.json"
-            if previous is None and cache.exists():
-                try:
-                    previous = json.loads(cache.read_text())
-                except (OSError, ValueError):
-                    pass
-            if previous:
-                # Do not turn an old saved forecast into today's forecast.
-                if "raw" in previous and datetime.fromisoformat(previous["fetchedAt"]).astimezone(PRAGUE).date() == datetime.now(PRAGUE).date():
-                    return format_weather(previous, stale=True)
-            return {"status": "unavailable", "error": "Weather unavailable. Check the internet connection."}
+            fetched_at = datetime.now(PRAGUE)
+            saved = {"raw": raw, "fetchedAt": fetched_at.isoformat()}
+            format_weather(saved, fetched_at)
+        except Exception as error:
+            if isinstance(error, (URLError, TimeoutError)):
+                logger.warning("Open-Meteo refresh failed after %.2fs: %s",
+                               time.monotonic() - started, error)
+            else:
+                logger.exception("Open-Meteo forecast could not be processed")
+            if _weather_cache:
+                previous, previous_time, _ = _weather_cache
+                _weather_cache = (previous, previous_time, True)
+            time.sleep(WEATHER_RETRY_SECONDS)
+            continue
+
+        _weather_cache = (saved, fetched_at, False)
+        logger.info("Open-Meteo refresh completed in %.2fs", time.monotonic() - started)
+        try:
+            path.parent.mkdir(exist_ok=True)
+            temporary = path.with_suffix(".json.tmp")
+            temporary.write_text(json.dumps(saved))
+            temporary.replace(path)
+        except OSError:
+            logger.exception("Could not persist the latest forecast")
+
+        midnight = datetime.combine(fetched_at.date() + timedelta(days=1), datetime.min.time(), PRAGUE)
+        next_refresh = min(fetched_at.timestamp() + WEATHER_REFRESH_SECONDS, midnight.timestamp())
+        time.sleep(max(1, next_refresh - time.time()))
 
 
 def snapshot():
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        weather_result = pool.submit(weather)
-        transit_result = pool.submit(transit)
-        try:
-            departures = transit_result.result()
-        except Exception:
-            departures = {"status": "unavailable", "error": "Cannot read the timetable. Run npm run sync.", "platforms": []}
-        now = datetime.now(timezone.utc)
-        conditions = weather_result.result()
-        try:
-            world = world_snapshot(conditions, now)
-        except (OSError, ValueError, KeyError):
-            world = {'status': 'unavailable', 'error': 'World memory unavailable; weather and trams still work.'}
-        return {"generatedAt": now.isoformat(), "timezone": "Europe/Prague", "greeting": greeting(now),
-                "mountainGreeting": greeting(now, theme="mountain"),
-                "location": "Ortenovo náměstí, Praha 7", "weather": conditions, "transit": departures,
-                "world": world}
+    try:
+        departures = transit()
+    except Exception:
+        logger.exception("Could not read the tram timetable")
+        departures = {"status": "unavailable", "error": "Cannot read the timetable. Run npm run sync.", "platforms": []}
+    now = datetime.now(timezone.utc)
+    conditions = weather(now)
+    try:
+        world = world_snapshot(conditions, now)
+    except (OSError, ValueError, KeyError):
+        logger.exception("Could not update illustrated world memory")
+        world = {'status': 'unavailable', 'error': 'World memory unavailable; weather and trams still work.'}
+    return {"generatedAt": now.isoformat(), "timezone": "Europe/Prague", "greeting": greeting(now),
+            "mountainGreeting": greeting(now, theme="mountain"),
+            "location": "Ortenovo náměstí, Praha 7", "weather": conditions, "transit": departures,
+            "world": world}

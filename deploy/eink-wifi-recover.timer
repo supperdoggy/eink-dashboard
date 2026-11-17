@@ -1,0 +1,10 @@
+[Unit]
+Description=Check the dashboard's Wi-Fi connection once a minute
+
+[Timer]
+OnBootSec=1min
+OnUnitInactiveSec=1min
+AccuracySec=5s
+
+[Install]
+WantedBy=timers.target

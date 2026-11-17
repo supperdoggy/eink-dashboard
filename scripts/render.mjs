@@ -9,9 +9,19 @@ const worlds = ['transmission', 'courtyard', 'petrol', 'comic', 'mountain'];
 if (!['daily', 'weather', 'station', ...worlds].includes(design)) throw new Error('Choose a supported dashboard design.');
 const output = resolve(options.output || `previews/${design}.png`);
 const base = options.url || 'http://127.0.0.1:8787';
+const started = performance.now();
 const browser = await launch();
 try {
   const page = await browser.newPage();
+  page.on('pageerror', error => console.error('Dashboard JavaScript error:', error));
+  page.on('requestfailed', request => {
+    console.warn('Dashboard resource failed:', new URL(request.url()).pathname, request.failure()?.errorText);
+  });
+  page.on('response', response => {
+    if (response.status() >= 400) {
+      console.warn('Dashboard resource returned HTTP', response.status(), new URL(response.url()).pathname);
+    }
+  });
   await page.setViewport({ width: 800, height: 480, deviceScaleFactor: 1 });
   const isWorld = worlds.includes(design);
   await ready(page, isWorld ? `${base}/worlds.html?view=${design}&display=1` : `${base}/?design=${design}&display=1`);
@@ -36,7 +46,8 @@ try {
     await mkdir(dirname(metadata), { recursive: true });
     await writeFile(metadata, JSON.stringify({ ...data, renderedAt: new Date().toISOString(), design }));
   }
-  console.log(`Saved ${design}: ${output} (800 × 480, black/white)`);
+  const seconds = ((performance.now() - started) / 1000).toFixed(2);
+  console.log(`Saved ${design}: ${output} (800 × 480, black/white) in ${seconds}s`);
 } finally {
   await browser.close();
 }

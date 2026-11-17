@@ -1,0 +1,13 @@
+[Unit]
+Description=Retry the dashboard's saved Wi-Fi connection
+After=NetworkManager.service
+ConditionPathExists=/etc/default/eink-wifi-recover
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/default/eink-wifi-recover
+RuntimeDirectory=eink-wifi-recover
+RuntimeDirectoryMode=0700
+RuntimeDirectoryPreserve=yes
+ExecStart=/usr/local/libexec/eink-wifi-recover
+TimeoutStartSec=65

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Today's Holešovice weather, the time in Prague, and one flight to follow across Europe.">
+  <title>Flight watch · Holešovice</title>
+  <link rel="icon" href="/assets/moon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="flights/flight.css">
+  <script type="module" src="/flights/flight.mjs"></script>
+  <script type="module" src="/flights/today.mjs"></script>
+</head>
+<body>
+  <header class="flight-shell flight-nav">
+    <a href="/worlds.html">Dashboard worlds</a>
+    <a href="/display.html">Choose display</a>
+  </header>
+  <main class="flight-shell">
+    <header class="flight-intro">
+      <h1>Flight watch.</h1>
+      <p>Today in Holešovice, with one flight to follow across Europe.</p>
+    </header>
+    <div class="flight-controls">
+      <nav aria-label="Flight dashboard design">
+        <a data-design="atlas" href="?view=atlas">Route Atlas</a>
+        <a data-design="radar" href="?view=radar">Night Radar</a>
+      </nav>
+      <button id="replay" type="button" aria-pressed="false">Try a replay</button>
+    </div>
+    <p id="flight-status" role="status">Looking for a flight with a known route…</p>
+    <div class="flight-frame">
+      <article class="flight-screen" id="flight-screen" aria-label="Route Atlas flight dashboard">
+        <header class="today" aria-label="Holešovice weather and Prague time">
+          <div class="today-weather">
+            <p class="today-label">Holešovice today</p>
+            <div class="weather-reading">
+              <p class="weather-temperature"><span id="weather-temperature">…</span><span class="weather-unit" id="weather-unit" hidden>°C</span></p>
+              <div class="weather-details">
+                <p class="weather-condition"><img id="weather-icon" src="/assets/cloud.svg" width="24" height="24" alt="" hidden><strong id="weather-condition">Loading weather…</strong></p>
+                <p id="weather-feels"></p>
+                <p id="weather-outlook"></p>
+              </div>
+            </div>
+          </div>
+          <div class="today-time">
+            <p id="today-date">Prague time</p>
+            <time id="local-clock" aria-label="Current time in Prague">…</time>
+          </div>
+        </header>
+        <header class="screen-header">
+          <span id="screen-name">Route Atlas</span>
+          <span id="phase">Acquiring flight</span>
+        </header>
+        <div class="route">
+          <section class="airport">
+            <strong id="origin-code">…</strong>
+            <span id="origin-city">Origin</span>
+            <small id="origin-country"></small>
+          </section>
+          <span class="route-arrow" aria-label="to">→</span>
+          <section class="airport">
+            <strong id="destination-code">…</strong>
+            <span id="destination-city">Destination</span>
+            <small id="destination-country"></small>
+          </section>
+        </div>
+        <div class="flight-map">
+          <canvas id="map" width="800" height="480" role="img" aria-label="Flight map of Europe"></canvas>
+          <div class="map-key" aria-hidden="true"><span><i></i>Observed track</span><span><i></i>Direct route</span></div>
+        </div>
+        <footer class="readings">
+          <div class="aircraft"><strong id="callsign">…</strong><span id="aircraft">Awaiting aircraft</span></div>
+          <dl class="metric"><dt>Altitude</dt><dd id="altitude">…</dd></dl>
+          <dl class="metric"><dt>Groundspeed</dt><dd id="speed">…</dd></dl>
+          <dl class="metric"><dt>Position report</dt><dd><time id="observed">…</time></dd></dl>
+        </footer>
+      </article>
+    </div>
+    <footer class="flight-credits">
+      <p>Live positions from <a href="https://www.adsb.lol/docs/open-data/api">adsb.lol (ODbL)</a>, route and aircraft details from <a href="https://www.adsbdb.com/">ADSBdb</a>, and map data from <a href="https://www.naturalearthdata.com/">Natural Earth</a>.</p>
+    </footer>
+    <noscript><p>Enable JavaScript to draw the route and receive flight positions.</p></noscript>
+  </main>
+</body>
+</html>

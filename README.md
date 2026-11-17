@@ -160,6 +160,25 @@ python3 hardware/refresh.py --render-only
 
 A render-only check saves `images/preview.png`, `images/preview.json` and `data/render-status.json`; it preserves the displayed image and its success record.
 
+### Diagnose Wi-Fi and display outages
+
+On the Pi, `bash deploy/enable-diagnostics.sh` enables persistent system logs and adds Wi-Fi, supplicant, and IPv4 DHCP debug messages. The journal is configured for 256 MiB and a maximum age of 14 days, with earlier rotation when it reaches the size limit. Logs stay on the Pi and include kernel events, Tailscale, data provider failures, browser errors, and panel refresh timings.
+
+The weather worker fetches Open-Meteo in the background every ten minutes and waits a minute after failed attempts. Dashboard requests read the last complete forecast immediately. If it is stale, the display labels it as saved weather. If there is no forecast for the current day, the clock and any valid scheduled trams still update.
+
+To keep retrying after a disconnect, install Wi-Fi recovery on the Pi with its existing NetworkManager profile name. NetworkManager retries indefinitely. A timer also attempts to reactivate the same profile after three consecutive checks with `wlan0` down. The timer leaves an active connection and a disabled Wi-Fi radio alone.
+
+```bash
+bash deploy/install-wifi-recovery.sh "Dumb home"
+sudo journalctl -u eink-wifi-recover.service -o short-iso --no-pager
+sudo journalctl --list-boots
+sudo journalctl -b -1 -u NetworkManager -u wpa_supplicant -u tailscaled \
+  -u eink-dashboard.service -u eink-refresh.service -o short-iso --no-pager
+sudo journalctl -k -b -1 -o short-iso --no-pager
+```
+
+Use `-b 0` for the current boot or add `--since` and `--until` to narrow the time window. Authentication failures, DHCP failures, and dashboard render errors appear in separate units.
+
 The installer expects the username and path above. Adjust the three unit files and installer guard if deploying under a different account or directory.
 
 ## Checks

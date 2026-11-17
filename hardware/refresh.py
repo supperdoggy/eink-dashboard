@@ -100,6 +100,7 @@ def refresh(root=ROOT, design=None, url='http://127.0.0.1:8787', render_only=Fal
         except (OSError, ValueError):
             previous = {}
         started = time.monotonic()
+        print(f'Refresh started: design={design} render_only={render_only}', flush=True)
         status = {'state': 'rendering', 'startedAt': utc_now(),
                   'lastSuccess': previous.get('lastSuccess'), 'design': design,
                   'lastDisplayedDesign': previous.get('lastDisplayedDesign') or (previous.get('design') if previous.get('state') == 'ok' else None)}
@@ -111,6 +112,8 @@ def refresh(root=ROOT, design=None, url='http://127.0.0.1:8787', render_only=Fal
                 run_command(['node', str(root / 'scripts/render.mjs'), f'--design={design}',
                              f'--url={url}', f'--output={frame}', f'--metadata={metadata}'], timeout=90)
                 snapshot = validate_frame(frame, metadata)
+                print(f'Frame validated: generatedAt={snapshot["generatedAt"]} '
+                      f'render_seconds={time.monotonic() - started:.2f}', flush=True)
                 if not render_only:
                     if from_settings and read_settings(root)['design'] != design:
                         status.update(state='superseded', finishedAt=utc_now())
